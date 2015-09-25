@@ -1,7 +1,9 @@
 $(function($, undefined) {
 
-	var camera, scene, renderer, controls, plane, ts;
-    var flag = 0;
+	var camera, scene, renderer, controls, plane, ts, isChrome;
+
+	isChrome = 0;
+	
 
 	var optionalParam = function(param, defaultParam) {
 		return param ? param : defaultParam;
@@ -75,12 +77,7 @@ $(function($, undefined) {
 
 	  
 	var init = function() {
-		var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
 
-		if (isChrome) {
-			$('.message').show();
-			return;
-		}
 	   	ts = 0;
 		    
 		addScene();
@@ -100,6 +97,7 @@ $(function($, undefined) {
 	    addPlane();  
 
 		addSky();
+
 	  
 	    renderer = new THREE.WebGLRenderer();
 	    renderer.setSize( window.innerWidth, window.innerHeight );
@@ -135,7 +133,7 @@ $(function($, undefined) {
   		}
   		plane.geometry.verticesNeedUpdate = true;
 	    render();
-	    requestAnimationFrame( animate );
+	    requestAnimationFrame(animate);
 		controls.update();
 	}
 	  
@@ -150,7 +148,11 @@ $(function($, undefined) {
 	    render();
 	}	
 
-	init();
-	animate();
+	if (isChrome) {
+		$('.message').show();
+	} else {
+		init();
+		animate();
+	}
 
 }(jQuery));
