@@ -1,4 +1,6 @@
- 
+.hide {
+	display: none;
+} 
 
 body {
 	margin: 0px;

@@ -14,7 +14,7 @@ $(function($, undefined) {
 
 	var addCamera = function() {
 		camera = new THREE.PerspectiveCamera( 70.0, window.innerWidth / window.innerHeight, 1, 10000);
-		camera.position.set(0, -300, 150);
+		camera.position.set(-15, 164, 262);
 		camera.lookAt(new THREE.Vector3(0, 0, 0));
 	}
 
@@ -65,19 +65,26 @@ $(function($, undefined) {
 		    	vertexShader:   vShader.text(),
 		    	fragmentShader: fShader.text()
   		});
-		var geometry = new THREE.PlaneGeometry( 1000, 600, 100, 100 );
+		var geometry = new THREE.PlaneGeometry( 1000, 800, 100, 100 );
 		plane = new THREE.Mesh( geometry, shaderMaterial );
 		plane.geometry.verticesNeedUpdate = true;
 		plane.position.z  = -30;
+		plane.rotation.x = 1.5;
 		scene.add(plane);
 	}
 
 	  
 	var init = function() {
+		var isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+
+		if (isChrome) {
+			$('.message').show();
+			return;
+		}
 	   	ts = 0;
 		    
 		addScene();
-	 
+	
 	    addCamera();
 	 
 	    addLight(0, 30, 30);
@@ -118,8 +125,8 @@ $(function($, undefined) {
   		for (var i = 0; i < vLength; i++) {
     		var v = plane.geometry.vertices[i];
     		var dist = new THREE.Vector2(v.x, v.y).sub(center);
-    		var size = 6.0;
-    		var magnitude = 800.0;
+    		var size = 8.0;
+    		var magnitude = 1000.0;
     		if (dist.length() <= 10) {
     			v.z = 0;
     		} else {
@@ -133,7 +140,7 @@ $(function($, undefined) {
 	}
 	  
 	var render = function() {
-	    renderer.render( scene, camera );
+	    renderer.render(scene, camera);
 	}
 	  
 	var onWindowResize = function() {
