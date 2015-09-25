@@ -55,7 +55,7 @@ $(function($, undefined) {
 		var vShader = $('#vs');
 		var fShader = $('#fs');
 		var uniforms = {
-    		texture1: { type: "t", value: THREE.ImageUtils.loadTexture( "images/water.jpg" ) },
+    		texture1: { type: "t", value: THREE.ImageUtils.loadTexture( "images/water.png" ) },
 		};
 		var shaderMaterial =
 			new THREE.ShaderMaterial({
