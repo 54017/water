@@ -1,8 +1,8 @@
 $(function($, undefined) {
 
-	var camera, scene, renderer, controls, plane, ts, isChrome;
+	var camera, scene, renderer, controls, plane, ts, isChrome, controller;
 
-	isChrome = 0;
+	isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
 	
 
 	var optionalParam = function(param, defaultParam) {
@@ -47,6 +47,16 @@ $(function($, undefined) {
 
 	}
 
+	var addText = function() {
+		var text = new THREE.TextGeometry('control paraments on the top right corner', {size: 30.0, height: 5.0, font: 'helvetiker', style: 'normal', weight: 'bold'});
+		var material = new THREE.MeshBasicMaterial({color: '#ffffff'});
+		var mesh = new THREE.Mesh(text, material);
+		mesh.position.z = -500;
+		mesh.position.x = -400;
+		mesh.position.y = 100;
+		scene.add(mesh);
+	}
+
 	var addPlane = function() {
 		var attributes = {
 			displacement: {
@@ -84,19 +94,15 @@ $(function($, undefined) {
 	
 	    addCamera();
 	 
-	    addLight(0, 30, 30);
-
-		addLight(0, 0, 0);
-
-		addLight(30, 0, 0);
-
-		addLight(0, -300, 150);
+	    
 
 		//addGeometry();
 	  
 	    addPlane();  
 
 		addSky();
+
+		addText();
 
 	  
 	    renderer = new THREE.WebGLRenderer();
@@ -108,6 +114,17 @@ $(function($, undefined) {
 	  // Add the orbit controls
 	    controls = new THREE.OrbitControls(camera, renderer.domElement);
 		    controls.target = new THREE.Vector3(0, 0, 0);
+
+		//图形控制控件
+		controller = new function() {
+			this.size = 8.0;
+			this.magnitude = 1000.0; 
+		}
+
+		var gui = new dat.GUI();
+
+		gui.add(controller, 'size', 1.0, 16.0);
+		gui.add(controller, 'magnitude', 500.0, 2000.0);
 
 	}
 	  
@@ -123,8 +140,8 @@ $(function($, undefined) {
   		for (var i = 0; i < vLength; i++) {
     		var v = plane.geometry.vertices[i];
     		var dist = new THREE.Vector2(v.x, v.y).sub(center);
-    		var size = 8.0;
-    		var magnitude = 1000.0;
+    		var size = controller.size;
+    		var magnitude = controller.magnitude;
     		if (dist.length() <= 10) {
     			v.z = 0;
     		} else {
