@@ -2,7 +2,7 @@ $(function($, undefined) {
 
 	var camera, scene, renderer, controls, plane, ts, isChrome, controller;
 
-	isChrome = window.navigator.userAgent.indexOf("Chrome") !== -1;
+	isChrome = -1;
 	
 
 	var optionalParam = function(param, defaultParam) {
