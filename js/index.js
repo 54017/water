@@ -4,6 +4,41 @@ $(function($, undefined) {
 
 	isChrome = 0;
 	
+	var Stats = function () {
+
+	var beginTime = ( performance || Date ).now(), prevTime = beginTime, frames = 0;
+
+	return {
+
+		begin: function () {
+
+			beginTime = ( performance || Date ).now();
+
+		},
+
+		end: function () {
+
+			frames ++;
+
+			var time = ( performance || Date ).now();
+
+
+			if ( time >= prevTime + 1000 ) {
+
+				 console.log("frames", frames * 1000  / ( time - prevTime ), 'average', (time - prevTime) / frames / 1000);
+
+				prevTime = time;
+				frames = 0;
+
+			}
+
+			return time;
+
+		}
+
+	};
+
+};
 
 	var optionalParam = function(param, defaultParam) {
 		return param ? param : defaultParam;
@@ -64,8 +99,8 @@ $(function($, undefined) {
 				value: []
 			}
 		}
-		var vShader = $('#vs');
-		var fShader = $('#fs');
+		var vShader = "varying vec2 vUv;void main() { vUv = uv;vec4 pos = vec4(position, 1.0);vec4 myPosition = modelViewMatrix * pos;gl_Position = projectionMatrix * myPosition; }";
+		var fShader = "varying vec2 vUv; uniform sampler2D texture1; void main() { vec2 position = -1.0 + 2.0 * vUv;vec4 noise = texture2D(texture1, vUv);vec2 T = vUv;T.x -= noise.y * 0.5;T.y += noise.z * 0.5;vec4 color = texture2D(texture1, T*1.5);gl_FragColor = color;}"
 		var uniforms = {
     		texture1: { type: "t", value: THREE.ImageUtils.loadTexture( "images/water.png" ) },
 		};
@@ -74,8 +109,8 @@ $(function($, undefined) {
 		    	//attributes: attributes,
 		    	uniforms: uniforms,
 		    	side: THREE.DoubleSide,
-		    	vertexShader:   vShader.text(),
-		    	fragmentShader: fShader.text()
+		    	vertexShader:   vShader,
+		    	fragmentShader: fShader
   		});
 		var geometry = new THREE.PlaneGeometry( 1000, 800, 100, 100 );
 		plane = new THREE.Mesh( geometry, shaderMaterial );
@@ -127,10 +162,11 @@ $(function($, undefined) {
 		gui.add(controller, 'magnitude', 500.0, 2000.0);
 
 	}
-	  
+	 var stats = new Stats();
 	var animate = function() {
 	    //mesh.rotation.x += .04;
 	    //mesh.rotation.y += .02;
+	stats.begin();
 		ts += 10;
 		if (ts > 100000) {
 			ts = 0;
@@ -150,6 +186,7 @@ $(function($, undefined) {
   		}
   		plane.geometry.verticesNeedUpdate = true;
 	    render();
+	stats.end();
 	    requestAnimationFrame(animate);
 		controls.update();
 	}

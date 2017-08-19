@@ -11,30 +11,6 @@
     <div class="message hide">
         <h1>抱歉，chrome不支持本地的代码，因为所谓安全问题（放心我还不会制作病毒）。所以请使用其他的浏览器打开本地的文件。什么！你说你只有chrome浏览器。。。。。好吧，既然这样那么就请直接访问<a href="http://54017.github.io/water/index.html">线上的地址吧～</a></h1>
     </div>
-	<script id="vs" type="x-shader/x-vertex">
-        varying vec2 vUv; 
-
-		void main() { 
-			vUv = uv;
-			vec4 pos = vec4(position, 1.0);
-			vec4 myPosition = modelViewMatrix * pos;
-			gl_Position = projectionMatrix * myPosition; 
-		}
-    </script>
-    
-    <script id="fs" type="x-shader/x-fragment">
-        varying vec2 vUv;
-        uniform sampler2D texture1;
-        void main() {
-        	vec2 position = -1.0 + 2.0 * vUv;
-        	vec4 noise = texture2D(texture1, vUv);
-        	vec2 T = vUv;
-        	T.x -= noise.y * 0.5;
-        	T.y += noise.z * 0.5;
-        	vec4 color = texture2D(texture1, T*1.5);
-            gl_FragColor = color;
-        }
-    </script>
     <script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/three.min.js"></script>
     <script type="text/javascript" src="js/helvetiker_bold.typeface.js"></script>
