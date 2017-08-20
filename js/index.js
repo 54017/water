@@ -1,8 +1,22 @@
 $(function($, undefined) {
 
-	var camera, scene, renderer, controls, plane, ts, isChrome, controller;
+	var camera, scene, renderer, controls, plane, ts, isChrome, controller, prev;
 
-	isChrome = 0;
+	var isChrome = 0;
+
+		var addText = function(frames, ms) {
+		if (prev) {
+			scene.remove(prev);
+		}
+		var text = new THREE.TextGeometry(frames + '    '  + ms, {size: 30.0, height: 5.0, font: 'helvetiker', style: 'normal', weight: 'bold'});
+		var material = new THREE.MeshBasicMaterial({color: '#ffffff'});
+		var mesh = new THREE.Mesh(text, material);
+		mesh.position.z = -500;
+		mesh.position.x = -400;
+		mesh.position.y = 100;
+		prev = mesh;
+		scene.add(mesh);
+	}
 	
 	var Stats = function () {
 
@@ -24,7 +38,7 @@ $(function($, undefined) {
 
 
 			if ( time >= prevTime + 1000 ) {
-
+				addText(frames * 1000  / ( time - prevTime ),(time - prevTime) / frames / 1000);
 				 console.log("frames", frames * 1000  / ( time - prevTime ), 'average', (time - prevTime) / frames / 1000);
 
 				prevTime = time;
@@ -80,16 +94,6 @@ $(function($, undefined) {
 		var mesh = new THREE.Mesh(sky, material);
 		scene.add(mesh);
 
-	}
-
-	var addText = function() {
-		var text = new THREE.TextGeometry('control paraments on the top right corner', {size: 30.0, height: 5.0, font: 'helvetiker', style: 'normal', weight: 'bold'});
-		var material = new THREE.MeshBasicMaterial({color: '#ffffff'});
-		var mesh = new THREE.Mesh(text, material);
-		mesh.position.z = -500;
-		mesh.position.x = -400;
-		mesh.position.y = 100;
-		scene.add(mesh);
 	}
 
 	var addPlane = function() {
